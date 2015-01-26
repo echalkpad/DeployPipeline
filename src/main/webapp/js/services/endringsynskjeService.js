@@ -6,6 +6,10 @@
             return $http.post('../services/endringsynskje', namn);
         };
 
+        service.hentEndringsynskjer = function() {
+            return $http.get('../services/endringsynskje');
+        }
+
         return service;
     }
 

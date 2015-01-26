@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.njanor.deploypipeline.endringsynskje.EndringsynskjeProjection;
 import no.ks.eventstore2.projection.ProjectionManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class ProjectionManagerInitializer {
         List<Props> props = new ArrayList<Props>();
 
         props.add(ApplicationStatusProjection.mkProps(eventStore));
+        props.add(EndringsynskjeProjection.mkProps(eventStore));
 
         return actorSystem.actorOf(ProjectionManager.mkProps(projectionErrorListener, props), "ProjectionManager");
     }

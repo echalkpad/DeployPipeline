@@ -2,6 +2,7 @@ package com.njanor.deploypipeline;
 
 import akka.actor.ActorRef;
 import com.njanor.deploypipeline.endringsynskje.EndringsynskjeCommandHandler;
+import com.njanor.deploypipeline.endringsynskje.EndringsynskjeProjection;
 import no.ks.eventstore2.eventstore.CompleteSubscriptionRegistered;
 import akka.actor.ActorSystem;
 import akka.testkit.TestActorRef;
@@ -23,5 +24,9 @@ public class SystemTestKit extends EventStoreTestKit {
 
     protected TestActorRef<EndringsynskjeCommandHandler> createEndringsynskjeCommandHandler(ActorRef eventstore) {
         return createCommandHandler(EndringsynskjeCommandHandler.mkProps(eventstore));
+    }
+
+    protected TestActorRef<EndringsynskjeProjection> createEndringsynskjeProjection() {
+        return createProjectionRef(EndringsynskjeProjection.mkProps(testActor()));
     }
 }

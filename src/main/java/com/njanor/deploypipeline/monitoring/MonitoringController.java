@@ -14,6 +14,7 @@ import no.ks.eventstore2.response.NoResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,7 +60,7 @@ public class MonitoringController {
         }
     }
 
-    @RequestMapping(value = "/applicationStatus", method = RequestMethod.GET)
+    @RequestMapping(value = "/applicationStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ApplicationStatus getApplicationStatus() {
         log.info("Get application status");

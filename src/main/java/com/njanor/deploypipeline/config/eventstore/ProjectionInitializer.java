@@ -5,6 +5,7 @@ import static no.ks.eventstore2.projection.CallProjection.call;
 
 import javax.annotation.Resource;
 
+import com.njanor.deploypipeline.endringsynskje.EndringsynskjeProjection;
 import no.ks.eventstore2.projection.Projection;
 
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,11 @@ public class ProjectionInitializer {
     @Bean(name = "applicationStatusProjection")
     public ActorRef getApplicationStatusProjectionRef() {
         return askProjectionRef(ApplicationStatusProjection.class);
+    }
+
+    @Bean(name = "endringsynskjeProjection")
+    public ActorRef getEndringsynskjeProjection() {
+        return askProjectionRef(EndringsynskjeProjection.class);
     }
 
     private ActorRef askProjectionRef(Class<? extends Projection> projectionClass) {

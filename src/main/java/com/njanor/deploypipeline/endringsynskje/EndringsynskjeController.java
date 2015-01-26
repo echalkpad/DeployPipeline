@@ -14,6 +14,8 @@ import scala.concurrent.duration.Duration;
 
 import javax.annotation.Resource;
 
+import java.util.List;
+
 import static akka.pattern.Patterns.ask;
 
 @Controller
@@ -21,6 +23,9 @@ import static akka.pattern.Patterns.ask;
 public class EndringsynskjeController{
 
     private static final Logger LOG = LoggerFactory.getLogger(EndringsynskjeController.class);
+
+    @Resource(name = "endringsynskjeProjection")
+    private ActorRef endringsynskjeProjection;
 
     @Resource(name = "commandDispatcher")
     private ActorRef commandDispatcher;
@@ -35,5 +40,11 @@ public class EndringsynskjeController{
         } catch (Exception e) {
             return;
         }
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Endringsynskje> hentEndringsynskje() {
+        return EndringsynskjeProjection.askRegistrerteEndringsynskjer(endringsynskjeProjection);
     }
 }
