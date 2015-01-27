@@ -14,17 +14,19 @@ import static org.junit.Assert.assertEquals;
 
 public class EndringsynskjeControllerTests extends SystemTestKit {
 
+    private TestActorRef<EndringsynskjeProjection> endringsynskjeProjection;
     private EndringsynskjeController controller;
 
     @Before
     public void setUp() {
         controller = new EndringsynskjeController();
+        endringsynskjeProjection = createEndringsynskjeProjection();
     }
 
     @Test
     public void testRegistrerEndringsynskje() {
         EventReceiver eventReceiver = createEventReceiver();
-        TestActorRef<EndringsynskjeCommandHandler> commandHandler = createEndringsynskjeCommandHandler(eventReceiver.self());
+        TestActorRef<EndringsynskjeCommandHandler> commandHandler = createEndringsynskjeCommandHandler(eventReceiver.self(), endringsynskjeProjection);
 
         ReflectionTestUtils.setField(controller, "commandDispatcher", commandHandler);
 
@@ -38,7 +40,6 @@ public class EndringsynskjeControllerTests extends SystemTestKit {
 
     @Test
     public void testHentAlleEndringsynskje() {
-        TestActorRef<EndringsynskjeProjection> endringsynskjeProjection = createEndringsynskjeProjection();
         EndringsynskjeRegistrertEvent event = new EndringsynskjeRegistrertEventBuilder().build();
         endringsynskjeProjection.tell(event, super.testActor());
         ReflectionTestUtils.setField(controller, "endringsynskjeProjection", endringsynskjeProjection);

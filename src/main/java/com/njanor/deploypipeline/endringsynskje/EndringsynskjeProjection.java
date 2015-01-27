@@ -11,6 +11,7 @@ import no.ks.eventstore2.projection.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Subscriber(Aggregate.ENDRINGSYNSKJE)
 public class EndringsynskjeProjection extends Projection {
@@ -37,6 +38,25 @@ public class EndringsynskjeProjection extends Projection {
     public static List<Endringsynskje> askRegistrerteEndringsynskjer(ActorRef endringsynskjeProjection) {
         try {
             return Asker.askProjection(endringsynskjeProjection, "getRegistrerteEndringsynskje").list(Endringsynskje.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Kunne ikkje henta endringsynskje");
+        }
+    }
+
+    public Endringsynskje getEndringsynskjeMed(String namn) {
+        List<Endringsynskje> endringsynskjelista =  endringsynskje.stream().filter(e -> e.getNamn().equalsIgnoreCase(namn)).collect(Collectors.toList());
+        if (endringsynskjelista.size() > 1) {
+            throw new RuntimeException("Fleire endringsynskje med same namn registrert");
+        }
+        if (endringsynskjelista.size() == 1) {
+            return endringsynskjelista.get(0);
+        }
+        return null;
+    }
+
+    public static Endringsynskje askEndringsynskjeMed(String namn, ActorRef endringsynskjeProjection) {
+        try {
+            return Asker.askProjection(endringsynskjeProjection, "getEndringsynskjeMed", namn).single(Endringsynskje.class);
         } catch (Exception e) {
             throw new RuntimeException("Kunne ikkje henta endringsynskje");
         }

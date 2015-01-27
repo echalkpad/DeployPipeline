@@ -22,8 +22,8 @@ public class SystemTestKit extends EventStoreTestKit {
         return projection;
     }
 
-    protected TestActorRef<EndringsynskjeCommandHandler> createEndringsynskjeCommandHandler(ActorRef eventstore) {
-        return createCommandHandler(EndringsynskjeCommandHandler.mkProps(eventstore));
+    protected TestActorRef<EndringsynskjeCommandHandler> createEndringsynskjeCommandHandler(ActorRef eventstore, ActorRef endringsynskjeProjection) {
+        return createCommandHandler(EndringsynskjeCommandHandler.mkProps(eventstore, endringsynskjeProjection));
     }
 
     protected TestActorRef<EndringsynskjeProjection> createEndringsynskjeProjection() {

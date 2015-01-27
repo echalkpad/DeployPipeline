@@ -14,4 +14,9 @@ public class RegistrerEndringsynskjeCommandBuilder extends TestDataBuilder<Regis
     public RegistrerEndringsynskjeCommand build() {
         return new RegistrerEndringsynskjeCommand(namn);
     }
+
+    public RegistrerEndringsynskjeCommandBuilder medNamn(String namn) {
+        this.namn = namn;
+        return this;
+    }
 }

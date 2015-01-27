@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class EndringsynskjeProjectionTest extends SystemTestKit {
 
@@ -29,5 +31,16 @@ public class EndringsynskjeProjectionTest extends SystemTestKit {
 
         assertEquals(1, EndringsynskjeProjection.askRegistrerteEndringsynskjer(projection).size());
         assertEquals(event.getNamn(), EndringsynskjeProjection.askRegistrerteEndringsynskjer(projection).get(0).getNamn());
+    }
+
+    @Test
+    public void hentEndringsynskjePaaNamn() {
+        EndringsynskjeRegistrertEvent event = new EndringsynskjeRegistrertEventBuilder().build();
+        projection.tell(event, super.testActor());
+        projection.tell(new EndringsynskjeRegistrertEventBuilder().medNamn(event.getNamn() + "TOILL").build(), super.testActor());
+
+        Endringsynskje endringsynskje = EndringsynskjeProjection.askEndringsynskjeMed(event.getNamn(), projection);
+        assertNotNull(endringsynskje);
+        assertEquals(event.getNamn(), endringsynskje.getNamn());
     }
 }

@@ -5,17 +5,25 @@ import akka.actor.Props;
 import no.ks.eventstore2.Handler;
 import no.ks.eventstore2.command.CommandHandler;
 
+import javax.annotation.Resource;
+
 public class EndringsynskjeCommandHandler extends CommandHandler {
-    public EndringsynskjeCommandHandler(ActorRef eventStore) {
+
+    private ActorRef endringsynskjeProjection;
+
+    public EndringsynskjeCommandHandler(ActorRef eventStore, ActorRef endringsynskjeProjection) {
         super(eventStore);
+        this.endringsynskjeProjection = endringsynskjeProjection;
     }
 
-    public static Props mkProps(ActorRef eventstore) {
-        return Props.create(EndringsynskjeCommandHandler.class, eventstore);
+    public static Props mkProps(ActorRef eventstore, ActorRef endringsynskjeProjection) {
+        return Props.create(EndringsynskjeCommandHandler.class, eventstore, endringsynskjeProjection);
     }
 
     @Handler
     public void handleCommand(RegistrerEndringsynskjeCommand command) {
-        eventStore.tell(new EndringsynskjeRegistrertEvent(command.getNamn()), self());
+        if (EndringsynskjeProjection.askEndringsynskjeMed(command.getNamn(), endringsynskjeProjection) == null) {
+            eventStore.tell(new EndringsynskjeRegistrertEvent(command.getNamn()), self());
+        }
     }
 }

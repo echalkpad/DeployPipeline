@@ -21,6 +21,10 @@ public class CommandDispatcherInitializer {
 
     @Resource(name = "eventStore")
     private ActorRef eventStore;
+
+    @Resource(name = "endringsynskjeProjection")
+    private ActorRef endringsynskjeProjection;
+
     @Autowired
     private ActorSystem actorSystem;
 
@@ -28,7 +32,7 @@ public class CommandDispatcherInitializer {
     public ActorRef getCommandDispatcherRef() {
         List<Props> props = new ArrayList<Props>();
 
-        props.add(EndringsynskjeCommandHandler.mkProps(eventStore));
+        props.add(EndringsynskjeCommandHandler.mkProps(eventStore, endringsynskjeProjection));
 
         return actorSystem.actorOf(CommandDispatcher.mkProps(props), "commandDispatcher");
     }
